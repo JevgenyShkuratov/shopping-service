@@ -1,5 +1,6 @@
 package com.javaguru.shoppingservice.controller;
 
+import com.javaguru.shoppingservice.domain.ProductEntity;
 import com.javaguru.shoppingservice.dto.ProductDto;
 import com.javaguru.shoppingservice.service.ProductService;
 import com.javaguru.shoppingservice.validation.ProductNotFoundException;
@@ -21,19 +22,11 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-//
-//    @GetMapping
-//    public List<ProductDto> findAllProducts() {
-//        List<ProductDto> productDtos = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
-//            productDtos.add(new ProductDto(
-//                    UUID.randomUUID().toString(),
-//                    "TEST_NAME" + i,
-//                    "TEST_DESCRIPTION"
-//            ));
-//        }
-//        return productDtos;
-//    }
+
+    @GetMapping
+    public List<ProductDto> findAllProducts() {
+        return productService.findAllProducts();
+    }
 
     @GetMapping("/{id}")
     public ProductDto findProductById(@PathVariable String id) {
@@ -49,12 +42,20 @@ public class ProductController {
                 builder.path("/products/{id}")
                         .buildAndExpand(response.getId()).toUri()).build();
     }
-//
-//    @PutMapping("/{id}")
-//    public void updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
-//        System.out.println("id " + id);
-//        System.out.println("update " + productDto);
-//    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{id}")
+    public void updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
+        System.out.println("Received request update product: " + productDto);
+        productService.update(productDto, id);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) {
+        System.out.println("Received delete product by id " + id);
+        productService.deleteProductById(id);
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler

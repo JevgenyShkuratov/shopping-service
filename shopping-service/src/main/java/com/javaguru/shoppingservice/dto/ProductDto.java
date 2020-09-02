@@ -1,12 +1,22 @@
 package com.javaguru.shoppingservice.dto;
 
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class ProductDto {
 
     private String id;
+
+    @NotNull
+    @Size(min = 2, max = 32)
     private String name;
+
+    @NotNull
+    @NotEmpty
+    @Size(min = 2, max = 32)
     private String description;
 
     public ProductDto() {
